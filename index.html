@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Průvodce AI pro malé podnikatele" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI & Automatizace - Průvodce pro malé podnikatele</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Navigace -->
+    <header class="header">
+      <div class="container nav-container">
+        <a href="#" class="logo">AI-Průvodce</a>
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li><a href="#uvod">Úvod</a></li>
+            <li><a href="#zaklady-ai">Základy AI</a></li>
+            <li><a href="#automatizace">Automatizace</a></li>
+            <li><a href="#nocode">No-code nástroje</a></li>
+            <li><a href="#kroky">Krok za krokem</a></li>
+            <li><a href="#priklady">Případové studie</a></li>
+            <li><a href="#bonus">Bonus</a></li>
+          </ul>
+        </nav>
+        <div class="burger" onclick="toggleMenu()">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hlavní blok (Hero) -->
+    <section class="hero">
+      <div class="container hero-content">
+        <h1>Umělá inteligence a automatizace</h1>
+        <p>Praktický průvodce pro malé podnikatele a OSVČ, kteří chtějí zefektivnit svou práci s využitím AI.</p>
+        <a href="#uvod" class="btn-primary">Začít objevovat</a>
+      </div>
+    </section>
+
+    <!-- Úvod -->
+    <section id="uvod" class="section">
+      <div class="container">
+        <h2>1. Úvod – Proč je AI a automatizace důležitá pro malé podnikatele?</h2>
+        <p>
+          Umělá inteligence (AI) a automatizace už nejsou jen výsadou velkých firem s IT týmy.
+          I menší podniky či jednotlivci mohou díky AI ušetřit čas, snížit náklady a zvýšit konkurenceschopnost.
+          Tento průvodce vám ukáže, jak do světa AI vstoupit jednoduše, bez programování, krok za krokem.
+        </p>
+      </div>
+    </section>
+
+    <!-- Základy AI -->
+    <section id="zaklady-ai" class="section alt-bg">
+      <div class="container">
+        <h2>2. Základy AI – Co to je, jak funguje, mýty vs. realita</h2>
+        <p>
+          AI (umělá inteligence) je obor informatiky, který se zabývá vývojem „chytrých“ systémů.
+          Nejčastěji se setkáváme se strojovým učením – program se učí z příkladů a dokáže řešit
+          konkrétní úkoly (překlad textů, rozpoznávání obrazu, psaní textů). Moderní AI nástroje
+          umí fungovat srozumitelně i pro laiky (např. ChatGPT) a mohou zásadně usnadnit práci
+          v marketingu, administrativě či komunikaci se zákazníky.
+        </p>
+      </div>
+    </section>
+
+    <!-- Automatizace -->
+    <section id="automatizace" class="section">
+      <div class="container">
+        <h2>3. Automatizace – Jaké úkoly lze automatizovat a jaké nástroje použít</h2>
+        <p>
+          Automatizace znamená, že určité úkony probíhají bez nutnosti ručního zásahu.
+          V podnikání se to týká hlavně repetitivních úkolů: vystavování faktur, posílání 
+          e-mailů, správa sociálních sítí a podobně. Nástroje jako Zapier, Make či IFTTT
+          umožňují propojit stovky aplikací (e-mail, účetnictví, webové formuláře) a nastavit 
+          pravidlo „když se stane A, proveď B“.
+        </p>
+      </div>
+    </section>
+
+    <!-- No-code nástroje -->
+    <section id="nocode" class="section alt-bg">
+      <div class="container">
+        <h2>4. No-code řešení – Jak využít AI bez programování</h2>
+        <p>
+          Chcete-li začít bez technických znalostí, existují tzv. no-code platformy: 
+          <strong>ChatGPT</strong> pro generování textů, <strong>Zapier/Make</strong> pro
+          automatizaci procesů, <strong>Midjourney</strong> pro tvorbu obrázků a další. 
+          Ve většině případů jen „klikáte“ a zadáváte, jak se mají data zpracovávat.
+        </p>
+      </div>
+    </section>
+
+    <!-- Krok za krokem -->
+    <section id="kroky" class="section">
+      <div class="container">
+        <h2>5. Krok za krokem – Jak začít s AI v podnikání (týdenní plán)</h2>
+        <ul class="checklist">
+          <li><strong>Den 1:</strong> Seznamte se s AI (ChatGPT, Bing Chat) a zkuste napsat pár dotazů.</li>
+          <li><strong>Den 2:</strong> Najděte jednu věc, kterou můžete zautomatizovat (např. e-mailový proces).</li>
+          <li><strong>Den 3:</strong> Založte si účet na Zapier/Make a vytvořte první automatizaci.</li>
+          <li><strong>Den 4:</strong> Zapojte AI do reálné tvorby obsahu (např. příspěvek na blog či soc. sítě).</li>
+          <li><strong>Den 5:</strong> Otestujte vaše řešení v praxi – nasazení do ostrého provozu.</li>
+          <li><strong>Den 6:</strong> Vyhodnoťte a dolaďte chyby. Zlepšete prompt/automatizaci.</li>
+          <li><strong>Den 7:</strong> Stanovte si plán pro pokračování a definujte další cíle.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Případové studie -->
+    <section id="priklady" class="section alt-bg">
+      <div class="container">
+        <h2>6. Případové studie – Jak to dělají ostatní</h2>
+        <p>
+          Inspirujte se reálnými příběhy podnikatelů jako Martin (freelancer v marketingu),
+          který si pomocí AI asistenta a jednoduché automatizace ušetřil až 10 hodin měsíčně.
+          Nebo firmou Petry, kde zavedení chatbota a pár propojení v Make snížilo vytížení 
+          zákaznické podpory o 30 %. 
+        </p>
+      </div>
+    </section>
+
+    <!-- Bonus -->
+    <section id="bonus" class="section">
+      <div class="container">
+        <h2>7. Bonus – Doporučené nástroje a tipy na další rozvoj</h2>
+        <p>
+          Sledujte novinky, zapojte se do komunity a nebojte se experimentovat.
+          Důležité je začít malými kroky a nenechat se odradit případnými neúspěchy.
+          AI svět se rychle vyvíjí – buďte o krok napřed a získejte konkurenční výhodu.
+        </p>
+        <p>
+          <em>Tento průvodce vychází z e-booku „Umělá inteligence a automatizace: 
+          Praktický průvodce pro malé podnikatele“.</em>
+        </p>
+      </div>
+    </section>
+
+    <!-- Patička -->
+    <footer class="footer">
+      <div class="container footer-content">
+        <p>&copy; 2025 Tvůj Web | Všechna práva vyhrazena</p>
+      </div>
+    </footer>
+
+    <script>
+      function toggleMenu() {
+        const navbar = document.getElementById('navbar');
+        navbar.classList.toggle('active');
+      }
+    </script>
+  </body>
+</html>
