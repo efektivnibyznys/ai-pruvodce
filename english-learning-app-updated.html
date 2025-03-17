@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Učíme se anglicky!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .image-card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .emoji {
+            font-size: 80px;
+            text-align: center;
+        }
+        
+        .control-panel {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .speak-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+        
+        .speak-button:hover {
+            background-color: #3e8e41;
+        }
+        
+        .feedback {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .feedback.show {
+            opacity: 1;
+        }
+        
+        .feedback-content {
+            font-size: 150px;
+            animation: bounce 0.5s ease infinite alternate;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: fall linear forwards;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        @keyframes bounce {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1.2);
+            }
+        }
+        
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Učíme se anglicky! 🇬🇧</h1>
+    
+    <div class="game-container">
+        <div class="images-grid" id="imagesGrid"></div>
+        
+        <div class="control-panel">
+            <button class="speak-button" id="speakButton">Poslouchat znovu 🔊</button>
+        </div>
+    </div>
+    
+    <div class="feedback" id="feedback">
+        <div class="feedback-content" id="feedbackContent"></div>
+    </div>
+    
+    <div class="loading" id="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <script>
+        // Konfigurace ElevenLabs API
+        const ELEVENLABS_API_KEY = "sk_d5840d78ec40ca2a36e2d49387c519e6cb8489176c611ae1";
+        const ELEVENLABS_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // Rachel - hlas pro děti
+        
+        // Globální proměnná pro audio
+        let currentAudio = null;
+        
+        // Seznam dostupných slov a obrázků
+        const wordsList = [
+            { word: "dog", emoji: "🐶", pronunciation: "dog" },
+            { word: "cat", emoji: "🐱", pronunciation: "cat" },
+            { word: "apple", emoji: "🍎", pronunciation: "apple" },
+            { word: "banana", emoji: "🍌", pronunciation: "banana" },
+            { word: "car", emoji: "🚗", pronunciation: "car" },
+            { word: "house", emoji: "🏠", pronunciation: "house" },
+            { word: "fish", emoji: "🐟", pronunciation: "fish" },
+            { word: "bird", emoji: "🐦", pronunciation: "bird" },
+            { word: "sun", emoji: "☀️", pronunciation: "sun" },
+            { word: "moon", emoji: "🌙", pronunciation: "moon" },
+            { word: "star", emoji: "⭐", pronunciation: "star" },
+            { word: "flower", emoji: "🌸", pronunciation: "flower" },
+            { word: "tree", emoji: "🌳", pronunciation: "tree" },
+            { word: "ball", emoji: "⚽", pronunciation: "ball" },
+            { word: "book", emoji: "📚", pronunciation: "book" },
+            { word: "bear", emoji: "🐻", pronunciation: "bear" }
+        ];
+        
+        // Globální proměnné
+        let currentWords = [];
+        let correctWord = null;
+        let isWaitingForAnswer = false;
+        
+        // Inicializace aplikace
+        window.onload = function() {
+            initGame();
+            
+            // Přidání event listeneru na tlačítko pro opakování slova
+            document.getElementById('speakButton').addEventListener('click', function() {
+                speakWord(correctWord.pronunciation);
+            });
+        };
+        
+        // Funkce pro inicializaci nebo obnovení hry
+        function initGame() {
+            // Zrušení animací
+            clearConfetti();
+            
+            // Výběr náhodných slov
+            currentWords = getRandomWords(4);
+            correctWord = currentWords[Math.floor(Math.random() * currentWords.length)];
+            
+            // Vytvoření herní plochy
+            renderGameBoard();
+            
+            // Přehrání slova po krátké prodlevě
+            setTimeout(() => {
+                speakWord(correctWord.pronunciation);
+                isWaitingForAnswer = true;
+            }, 800);
+        }
+        
+        // Funkce pro náhodný výběr slov
+        function getRandomWords(count) {
+            const shuffled = [...wordsList].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+        
+        // Vykreslení herní plochy
+        function renderGameBoard() {
+            const grid = document.getElementById('imagesGrid');
+            grid.innerHTML = '';
+            
+            currentWords.forEach(wordObj => {
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.dataset.word = wordObj.word;
+                
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                emoji.textContent = wordObj.emoji;
+                
+                card.appendChild(emoji);
+                
+                card.addEventListener('click', function() {
+                    if (!isWaitingForAnswer) return;
+                    
+                    if (wordObj.word === correctWord.word) {
+                        // Správná odpověď
+                        showFeedback('🎉', true);
+                        isWaitingForAnswer = false;
+                        setTimeout(initGame, 2000);
+                    } else {
+                        // Nesprávná odpověď
+                        showFeedback('😢', false);
+                        setTimeout(() => {
+                            speakWord(correctWord.pronunciation);
+                        }, 1000);
+                    }
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // Funkce pro přehrání slova pomocí ElevenLabs API
+        function speakWord(word) {
+            // Zobrazení načítání
+            document.getElementById('loading').style.display = 'flex';
+            
+            // Zastavení předchozího přehrávání
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+            
+            // Volání ElevenLabs API
+            fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'xi-api-key': ELEVENLABS_API_KEY
+                },
+                body: JSON.stringify({
+                    text: word,
+                    voice_settings: {
+                        stability: 0.5,
+                        similarity_boost: 0.5
+                    },
+                    model_id: 'eleven_monolingual_v1'
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Chyba při volání ElevenLabs API');
+                }
+                return response.blob();
+            })
+            .then(audioBlob => {
+                const audioUrl = URL.createObjectURL(audioBlob);
+                currentAudio = new Audio(audioUrl);
+                currentAudio.play();
+                
+                // Skrytí načítání po začátku přehrávání
+                document.getElementById('loading').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error with ElevenLabs API:', error);
+                // Fallback na Web Speech API v případě chyby
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+                
+                // Skrytí načítání
+                document.getElementById('loading').style.display = 'none';
+            });
+        }
+        
+        // Zobrazení zpětné vazby
+        function showFeedback(emoji, isCorrect) {
+            const feedback = document.getElementById('feedback');
+            const content = document.getElementById('feedbackContent');
+            
+            content.textContent = emoji;
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                createConfetti();
+            }
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 1500);
+        }
+        
+        // Vytvoření konfet pro oslavu
+        function createConfetti() {
+            const confettiCount = 100;
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.opacity = Math.random();
+                document.body.appendChild(confetti);
+                
+                // Odstranění konfet po dokončení animace
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Odstranění všech konfet
+        function clearConfetti() {
+            const confettis = document.querySelectorAll('.confetti');
+            confettis.forEach(confetti => confetti.remove());
+        }
+    </script>
+</body>
+</html>
